@@ -1,0 +1,3 @@
+[submodule "xrsight-chipyard"]
+	path = xrsight-chipyard
+	url = https://github.com/pcg108/xrsight-chipyard.git
