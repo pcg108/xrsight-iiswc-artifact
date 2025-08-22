@@ -1,0 +1,29 @@
+alveo_u250_firesim_rocket_fp32_gemmini:
+    PLATFORM: xilinx_alveo_u250
+    TARGET_PROJECT: firesim
+    TARGET_PROJECT_MAKEFRAG: <placeholder>/generators/firechip/chip/src/main/makefrag/firesim
+    DESIGN: FireSims
+    TARGET_CONFIG:  FireSimFPGemminiRocketConfig  
+    PLATFORM_CONFIG: BaseXilinxAlveoU250Config
+    deploy_quintuplet: null
+    platform_config_args:
+        fpga_frequency: 40
+        build_strategy: TIMING
+    post_build_hook: null
+    metasim_customruntimeconfig: null
+    bit_builder_recipe: bit-builder-recipes/xilinx_alveo_u250.yaml
+
+alveo_u250_firesim_int8_gemmini_rocket_singlecore_no_nic:
+    PLATFORM: xilinx_alveo_u250
+    TARGET_PROJECT: firesim
+    TARGET_PROJECT_MAKEFRAG: <placeholder>/generators/firechip/chip/src/main/makefrag/firesim
+    DESIGN: FireSim
+    TARGET_CONFIG:  FireSimGemminiRocketConfig 
+    PLATFORM_CONFIG: BaseXilinxAlveoU250Config
+    deploy_quintuplet: null
+    platform_config_args:
+        fpga_frequency: 60
+        build_strategy: TIMING
+    post_build_hook: null
+    metasim_customruntimeconfig: null
+    bit_builder_recipe: bit-builder-recipes/xilinx_alveo_u250.yaml

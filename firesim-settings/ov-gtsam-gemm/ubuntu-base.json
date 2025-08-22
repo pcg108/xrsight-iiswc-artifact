@@ -1,0 +1,9 @@
+{
+	"benchmark_name": "ubuntu-base",
+	"common_simulation_outputs": [
+		"uartlog",
+		"/root/ILLIXR/build/ov_msckf_timing.txt"
+	],
+	"common_bootbinary": "../../../../../software/firemarshal/images/firechip/ubuntu-base/ubuntu-base-bin",
+	"common_rootfs": "../../../../../software/firemarshal/images/firechip/ubuntu-base/ubuntu-base-ov-gtsam-gemm.img"
+}

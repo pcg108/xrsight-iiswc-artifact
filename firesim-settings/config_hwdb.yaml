@@ -1,0 +1,8 @@
+alveo_u250_firesim_int8_gemmini_rocket_singlecore_no_nic:
+    bitstream_tar: <placeholder>/bitstreams/rocket_int8_gemmini.tar.gz
+    custom_runtime_config: null
+
+alveo_u250_firesim_rocket_fp32_gemmini:
+    bitstream_tar: <placeholder>/bitstreams/rocket_fp32_gemmini.tar.gz
+    deploy_quintuplet_override: null
+    custom_runtime_config: null
