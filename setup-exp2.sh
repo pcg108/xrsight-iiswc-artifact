@@ -19,6 +19,8 @@ ssh-add firesim.pem
 cd -
 source sourceme-manager.sh || { echo "Failed to source FireSim manager"; exit 1; }
 
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+
 # copy ubuntu-base-bin over to firemarshal directory
 cp $ROOT_DIR/firesim-settings/ubuntu-base-bin $CY_DIR/software/firemarshal/images/firechip/ubuntu-base/ubuntu-base-bin || { echo "Failed to copy ubuntu-base-bin"; exit 1; }
 
