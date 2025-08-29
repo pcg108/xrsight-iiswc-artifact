@@ -127,7 +127,7 @@ chmod +x setup-exp3.sh
 ./setup-exp3.sh
 </pre>
 
-**8. In a new terminal, login and run**
+In a new terminal, login and run
 <pre>
 chmod +x monitor-exp3.sh
 ./monitor-exp3.sh
@@ -138,3 +138,56 @@ chmod +x monitor-exp3.sh
 cd ~/xrsight-iiswc-artifact
 python parse.py
 </pre>
+
+**9. VIO experiments**
+
+These scripts help generate Figures 12-14 in the paper, for the VIO case study.
+
+Baseline (~4-5 hours):
+<pre>
+cd ~/xrsight-iiswc-artifact
+chmod +x setup-vio-generic.sh
+./setup-vio-generic.sh
+</pre>
+
+In a new terminal, login and run
+<pre>
+chmod +x monitor-vio-generic.sh
+./monitor-vio-generic.sh
+</pre>
+
+Saturn (~4-5 hours):
+<pre>
+cd ~/xrsight-iiswc-artifact
+chmod +x setup-vio-saturn.sh
+./setup-vio-saturn.sh
+</pre>
+
+In a new terminal, login and run
+<pre>
+chmod +x monitor-vio-saturn.sh
+./monitor-vio-saturn.sh
+</pre>
+
+Gemmini (note that this will likely take 3-4x as long):
+<pre>
+cd ~/xrsight-iiswc-artifact
+chmod +x setup-vio-gemmini.sh
+./setup-vio-gemmini.sh
+</pre>
+
+In a new terminal, login and run
+<pre>
+chmod +x monitor-vio-gemmini.sh
+./monitor-vio-gemmini.sh
+</pre>
+
+**10. Generate plots**
+<pre>
+# for all 3 configurations
+python parse_vio_full.py
+
+# for baseline and saturn only
+python parse_vio_saturn_only.py
+</pre>
+
