@@ -82,10 +82,14 @@ run_commands() {
             sleep 2  # Allow time for hardcopy to complete
             
             # Check if command completed (looking for prompt)
-            if [ -f "$TMPFILE" ] && tail -5 "$TMPFILE" | grep -q "root@ubuntu:~#"; then
-                echo "[$(date +%H:%M:%S)] Command $cmd_num completed"
-                rm -f "$TMPFILE"
-                break
+            if [ -f "$TMPFILE" ]; then
+                # Check for either root@ubuntu:~# or being in OpenVINS directory
+                if tail -5 "$TMPFILE" | grep -q "root@ubuntu:~#" || \
+                   tail -5 vio_saturn.txt | grep -q "root@ubuntu:.*OpenVINS.*#"; then
+                    echo "[$(date +%H:%M:%S)] Command $cmd_num completed"
+                    rm -f "$TMPFILE"
+                    break
+                fi
             fi
             
             # Clean up temp file
