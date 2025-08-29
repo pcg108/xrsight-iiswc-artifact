@@ -237,14 +237,14 @@ def parse_rvv_test_results(text, test):
 
 def plot_kernel_speedups(sb_saturn, sb_gemmini, sb_generic):
     saturn_kernel = parse_rvv_test_results(sb_saturn, 'zvl256')
-    # gemmini_kernel = parse_rvv_test_results(sb_gemmini, 'gemmini')
+    gemmini_kernel = parse_rvv_test_results(sb_gemmini, 'gemmini')
     generic_kernel = parse_rvv_test_results(sb_generic, 'generic')
 
     dims = sorted(generic_kernel['GEMM'].keys())
     saturn_percent = [(generic_kernel['GEMM'][d] - saturn_kernel['GEMM'][d]) / generic_kernel['GEMM'][d] * 100 for d in dims]
-    # gemmini_percent = [(generic_kernel['GEMM'][d] - gemmini_kernel['GEMM'][d]) / generic_kernel['GEMM'][d] * 100 for d in dims]
+    gemmini_percent = [(generic_kernel['GEMM'][d] - gemmini_kernel['GEMM'][d]) / generic_kernel['GEMM'][d] * 100 for d in dims]
     plt.figure(figsize=(8,5))
-    # plt.plot(dims, gemmini_percent, 'r-o', label='Gemmini')
+    plt.plot(dims, gemmini_percent, 'r-o', label='Gemmini')
     plt.plot(dims, saturn_percent, 'g-o', label='Saturn')
     plt.xlabel('Matrix Dimension')
     plt.ylabel('% Increase over Generic')
@@ -255,9 +255,9 @@ def plot_kernel_speedups(sb_saturn, sb_gemmini, sb_generic):
 
     dims = sorted(generic_kernel['GEMV_N'].keys())
     saturn_percent = [(generic_kernel['GEMV_N'][d] - saturn_kernel['GEMV_N'][d]) / generic_kernel['GEMV_N'][d] * 100 for d in dims]
-    # gemmini_percent = [(generic_kernel['GEMV_N'][d] - gemmini_kernel['GEMV_N'][d]) / generic_kernel['GEMV_N'][d] * 100 for d in dims]
+    gemmini_percent = [(generic_kernel['GEMV_N'][d] - gemmini_kernel['GEMV_N'][d]) / generic_kernel['GEMV_N'][d] * 100 for d in dims]
     plt.figure(figsize=(8,5))
-    # plt.plot(dims, gemmini_percent, 'r-o', label='Gemmini')
+    plt.plot(dims, gemmini_percent, 'r-o', label='Gemmini')
     plt.plot(dims, saturn_percent, 'g-o', label='Saturn')
     plt.xlabel('Matrix Dimension')
     plt.ylabel('% Increase over Generic')
@@ -268,9 +268,9 @@ def plot_kernel_speedups(sb_saturn, sb_gemmini, sb_generic):
 
     dims = sorted(generic_kernel['GEMV_T'].keys())
     saturn_percent = [(generic_kernel['GEMV_T'][d] - saturn_kernel['GEMV_T'][d]) / generic_kernel['GEMV_T'][d] * 100 for d in dims]
-    # gemmini_percent = [(generic_kernel['GEMV_T'][d] - gemmini_kernel['GEMV_T'][d]) / generic_kernel['GEMV_T'][d] * 100 for d in dims]
+    gemmini_percent = [(generic_kernel['GEMV_T'][d] - gemmini_kernel['GEMV_T'][d]) / generic_kernel['GEMV_T'][d] * 100 for d in dims]
     plt.figure(figsize=(8,5))
-    # plt.plot(dims, gemmini_percent, 'r-o', label='Gemmini')
+    plt.plot(dims, gemmini_percent, 'r-o', label='Gemmini')
     plt.plot(dims, saturn_percent, 'g-o', label='Saturn')
     plt.xlabel('Matrix Dimension')
     plt.ylabel('% Increase over Generic')
@@ -280,26 +280,26 @@ def plot_kernel_speedups(sb_saturn, sb_gemmini, sb_generic):
     plt.savefig('figures/gemv_t_kernel_speedup.png')
 
 sb_saturn = read_screen_buffer_from_file('screen_dumps/vio_saturn.txt')
-# sb_gemmini = read_screen_buffer_from_file('screen_dumps/vio_gemmini.txt')
+sb_gemmini = read_screen_buffer_from_file('screen_dumps/vio_gemmini.txt')
 sb_generic = read_screen_buffer_from_file('screen_dumps/vio_generic.txt')
 
 plot_kernel_speedups(sb_saturn, sb_generic, sb_generic)
 
 
-# # plot saturn bars (figure 13a)
-# csv_data_saturn = parse_screen_buffer(sb_saturn)
-# fig, timing_data = plot_timing_data(csv_data_saturn)            
-# output_filename = "figures/saturn_bars.png"
-# fig.savefig(output_filename, dpi=300, bbox_inches='tight')
-# print(f"Plot saved as: {output_filename}")
+# plot saturn bars (figure 13a)
+csv_data_saturn = parse_screen_buffer(sb_saturn)
+fig, timing_data = plot_timing_data(csv_data_saturn)            
+output_filename = "figures/saturn_bars.png"
+fig.savefig(output_filename, dpi=300, bbox_inches='tight')
+print(f"Plot saved as: {output_filename}")
 
-# # plot gemmini bars (figure 13b)
-# csv_data_gemmini = parse_screen_buffer(sb_gemmini)
-# fig, timing_data = plot_timing_data(csv_data_gemmini)            
-# output_filename = "figures/gemmini_bars.png"
-# fig.savefig(output_filename, dpi=300, bbox_inches='tight')
-# print(f"Plot saved as: {output_filename}")
+# plot gemmini bars (figure 13b)
+csv_data_gemmini = parse_screen_buffer(sb_gemmini)
+fig, timing_data = plot_timing_data(csv_data_gemmini)            
+output_filename = "figures/gemmini_bars.png"
+fig.savefig(output_filename, dpi=300, bbox_inches='tight')
+print(f"Plot saved as: {output_filename}")
         
 
-# csv_data_scalar = parse_screen_buffer(sb_generic)
-# plot_ov_speedup_over_scalar(csv_data_saturn, csv_data_scalar)
+csv_data_scalar = parse_screen_buffer(sb_generic)
+plot_ov_speedup_over_scalar(csv_data_saturn, csv_data_scalar)
