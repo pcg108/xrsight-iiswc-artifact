@@ -28,6 +28,9 @@ COMMANDS=(
     "./rvvTest-generic 1 128 1 1 0 20"
     "./rvvTest-generic 1 256 1 1 0 20"
     "./rvvTest-generic 1 512 1 1 0 20"
+    "cd OpenVINS"
+    "./run_illixr_msckf-vcv-gen data/mav0/cam0/data.csv data/mav0/cam1/data.csv data/mav0/imu0/data.csv data/mav0/cam0/data data/mav0/cam1/data"
+    "cat ov_msckf_timing.txt"
 )
 
 # -------------------------
