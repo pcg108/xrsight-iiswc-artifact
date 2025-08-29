@@ -58,7 +58,8 @@ target_config:
     # This references a section from config_hwdb.yaml for fpga-accelerated simulation
     # or from config_build_recipes.yaml for metasimulation
     # for all simulators
-    default_hw_config: alveo_u250_firesim_rocket_fp32_gemmini
+    default_hw_config:  alveo_u250_firesim_saturn_fp32_gemmini
+                        # alveo_u250_firesim_rocket_fp32_gemmini
                         # alveo_u250_firesim_single_rocket_dual_gemmini
                         # alveo_u250_firesim_rocket_singlecore 
                         # alveo_u250_firesim_int8_gemmini_rocket_singlecore_no_nic
