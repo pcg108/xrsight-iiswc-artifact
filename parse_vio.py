@@ -7,47 +7,45 @@ import sys
 import re
 from typing import Dict, Any
 
-def parse_screen_buffer(screen_buffer_text):
+def parse_screen_buffer(screen_buffer_text, expected_cols=16):
     """
-    Parse screen buffer text to extract the timing data from ov_msckf_timing.txt
+    Parse ov_msckf_timing.txt output from a screen buffer into a DataFrame.
+    Assumes `expected_cols` total columns (default 16).
     """
-    lines = screen_buffer_text.strip().split('\n')
-    
-    # Find the line that contains the cat command
-    cat_line_idx = -1
-    for i, line in enumerate(lines):
-        if 'cat ov_msckf_timing.txt' in line:
-            cat_line_idx = i
-            break
-    
-    if cat_line_idx == -1:
-        raise ValueError("Could not find 'cat ov_msckf_timing.txt' command in buffer")
-    
-    # Extract data lines (everything after the cat command)
-    data_lines = lines[cat_line_idx + 1:]
-    
-    # Filter out empty lines and command prompts
-    clean_data_lines = []
+    lines = screen_buffer_text.strip().splitlines()
+
+    # Find where "cat ov_msckf_timing.txt" appears
+    try:
+        start_idx = next(i for i, l in enumerate(lines) if 'cat ov_msckf_timing.txt' in l)
+    except StopIteration:
+        raise ValueError("Could not find 'cat ov_msckf_timing.txt' in buffer")
+
+    # Take only the relevant lines
+    data_lines = [
+        l.strip() for l in lines[start_idx+1:]
+        if l.strip() and not l.startswith("root@ubuntu")
+    ]
+
+    # ---- Rebuild header ----
+    header = ""
+    while data_lines and header.count(",") + 1 < expected_cols:
+        header += data_lines.pop(0).lstrip("#").strip()
+    header = header.replace(" ", "")  # remove spaces in column names like "msckf update" → "msckfupdate"
+
+    # ---- Rebuild rows ----
+    rows, buf = [], ""
     for line in data_lines:
-        line = line.strip()
-        if line and not line.startswith('root@ubuntu') and not line.startswith('#'):
-            clean_data_lines.append(line)
-    
-    # The header line should be the first line that starts with #
-    header_line = None
-    for line in lines[cat_line_idx:]:
-        if line.strip().startswith('#'):
-            header_line = line.strip()[1:]  # Remove the # symbol
-            break
-    
-    if not header_line:
-        # Default header based on the expected format
-        header_line = "timestamp (ms),tracking,propagation,msckf update,slam update,slam delayed,marginalization,total,q_GtoI.x,q_GtoI.y,q_GtoI.z,q_GtoI.w,p_IinG.x,p_IinG.y,p_IinG.z,dist"
-    
-    # Create CSV-like string
-    csv_data = header_line + '\n' + '\n'.join(clean_data_lines)
-    
-    return csv_data
+        buf += line
+        if buf.count(",") + 1 == expected_cols:
+            rows.append(buf)
+            buf = ""
+    if buf:
+        rows.append(buf)
+
+    # ---- Build CSV string and parse ----
+    csv_text = header + "\n" + "\n".join(rows)
+    return csv_text
+
 
 def plot_timing_data(csv_data):
     """
@@ -57,8 +55,8 @@ def plot_timing_data(csv_data):
     df = pd.read_csv(StringIO(csv_data))
     
     # Extract timing columns (up to 'total')
-    timing_columns = ['tracking', 'propagation', 'msckf update', 'slam update', 
-                     'slam delayed', 'marginalization']
+    timing_columns = ['tracking', 'propagation', 'msckfupdate', 'slamupdate', 
+                     'slamdelayed', 'marginalization']
     
     # Convert nanoseconds to milliseconds for better readability
     timing_data = df[timing_columns] / 1e6  # Convert ns to ms
@@ -117,7 +115,7 @@ def plot_ov_speedup_over_scalar(csv_data_saturn, csv_data_scalar):
     """
     # Read the CSV data
     df_saturn = pd.read_csv(StringIO(csv_data_saturn))
-    df_scalar = pd.read_csv(StringIO(csv_data_saturn))
+    df_scalar = pd.read_csv(StringIO(csv_data_scalar))
 
     speedup = (df_scalar['total'] - df_saturn['total']) / df_scalar['total']
     speedup = speedup.round(2)
@@ -283,8 +281,8 @@ sb_saturn = read_screen_buffer_from_file('screen_dumps/vio_saturn.txt')
 sb_gemmini = read_screen_buffer_from_file('screen_dumps/vio_gemmini.txt')
 sb_generic = read_screen_buffer_from_file('screen_dumps/vio_generic.txt')
 
+# plot individual kernel speedup (Figure 12)
 plot_kernel_speedups(sb_saturn, sb_generic, sb_generic)
-
 
 # plot saturn bars (figure 13a)
 csv_data_saturn = parse_screen_buffer(sb_saturn)
@@ -300,6 +298,6 @@ output_filename = "figures/gemmini_bars.png"
 fig.savefig(output_filename, dpi=300, bbox_inches='tight')
 print(f"Plot saved as: {output_filename}")
         
-
+# plot saturn vs scalar for VIO (figure 14)
 csv_data_scalar = parse_screen_buffer(sb_generic)
 plot_ov_speedup_over_scalar(csv_data_saturn, csv_data_scalar)
