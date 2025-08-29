@@ -86,10 +86,10 @@ def plot_timing_data(csv_data):
     ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     
     # Add total time as text on top of each bar
-    totals = timing_data.sum(axis=1)
-    for i, total in enumerate(totals):
-        ax.text(i, total + max(totals) * 0.01, f'{total:.1f}', 
-                ha='center', va='bottom', fontsize=8)
+    # totals = timing_data.sum(axis=1)
+    # for i, total in enumerate(totals):
+    #     ax.text(i, total + max(totals) * 0.01, f'{total:.1f}', 
+    #             ha='center', va='bottom', fontsize=8)
     
     # Rotate x-axis labels if needed
     plt.xticks(rotation=45)
@@ -101,10 +101,10 @@ def plot_timing_data(csv_data):
     stats = timing_data.describe()
     print(stats)
     
-    print(f"\nTotal samples: {len(timing_data)}")
-    print(f"Average total time: {totals.mean():.2f} ms")
-    print(f"Max total time: {totals.max():.2f} ms")
-    print(f"Min total time: {totals.min():.2f} ms")
+    # print(f"\nTotal samples: {len(timing_data)}")
+    # print(f"Average total time: {totals.mean():.2f} ms")
+    # print(f"Max total time: {totals.max():.2f} ms")
+    # print(f"Min total time: {totals.min():.2f} ms")
     
     return fig, timing_data
 

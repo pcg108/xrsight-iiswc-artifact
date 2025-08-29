@@ -85,11 +85,11 @@ def plot_timing_data(csv_data):
     ax.set_title('OpenVINS MSCKF Timing Breakdown (Stacked Bar Chart)')
     ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
     
-    # Add total time as text on top of each bar
-    totals = timing_data.sum(axis=1)
-    for i, total in enumerate(totals):
-        ax.text(i, total + max(totals) * 0.01, f'{total:.1f}', 
-                ha='center', va='bottom', fontsize=8)
+    # # Add total time as text on top of each bar
+    # totals = timing_data.sum(axis=1)
+    # for i, total in enumerate(totals):
+    #     ax.text(i, total + max(totals) * 0.01, f'{total:.1f}', 
+    #             ha='center', va='bottom', fontsize=8)
     
     # Rotate x-axis labels if needed
     plt.xticks(rotation=45)
@@ -101,10 +101,10 @@ def plot_timing_data(csv_data):
     stats = timing_data.describe()
     print(stats)
     
-    print(f"\nTotal samples: {len(timing_data)}")
-    print(f"Average total time: {totals.mean():.2f} ms")
-    print(f"Max total time: {totals.max():.2f} ms")
-    print(f"Min total time: {totals.min():.2f} ms")
+    # print(f"\nTotal samples: {len(timing_data)}")
+    # print(f"Average total time: {totals.mean():.2f} ms")
+    # print(f"Max total time: {totals.max():.2f} ms")
+    # print(f"Min total time: {totals.min():.2f} ms")
     
     return fig, timing_data
 
@@ -277,27 +277,27 @@ def plot_kernel_speedups(sb_saturn, sb_gemmini, sb_generic):
     plt.grid(True)
     plt.savefig('figures/gemv_t_kernel_speedup.png')
 
-# sb_saturn = read_screen_buffer_from_file('screen_dumps/vio_saturn.txt')
-# sb_gemmini = read_screen_buffer_from_file('screen_dumps/vio_gemmini.txt')
-# sb_generic = read_screen_buffer_from_file('screen_dumps/vio_generic.txt')
+sb_saturn = read_screen_buffer_from_file('screen_dumps/vio_saturn.txt')
+sb_gemmini = read_screen_buffer_from_file('screen_dumps/vio_gemmini.txt')
+sb_generic = read_screen_buffer_from_file('screen_dumps/vio_generic.txt')
 
 # # plot individual kernel speedup (Figure 12)
-# plot_kernel_speedups(sb_saturn, sb_generic, sb_generic)
+plot_kernel_speedups(sb_saturn, sb_generic, sb_generic)
 
 # # plot saturn bars (figure 13a)
-# csv_data_saturn = parse_screen_buffer(sb_saturn)
-# fig, timing_data = plot_timing_data(csv_data_saturn)            
-# output_filename = "figures/saturn_bars.png"
-# fig.savefig(output_filename, dpi=300, bbox_inches='tight')
-# print(f"Plot saved as: {output_filename}")
+csv_data_saturn = parse_screen_buffer(sb_saturn)
+fig, timing_data = plot_timing_data(csv_data_saturn)            
+output_filename = "figures/saturn_bars.png"
+fig.savefig(output_filename, dpi=300, bbox_inches='tight')
+print(f"Plot saved as: {output_filename}")
 
-# # plot gemmini bars (figure 13b)
-# csv_data_gemmini = parse_screen_buffer(sb_gemmini)
-# fig, timing_data = plot_timing_data(csv_data_gemmini)            
-# output_filename = "figures/gemmini_bars.png"
-# fig.savefig(output_filename, dpi=300, bbox_inches='tight')
-# print(f"Plot saved as: {output_filename}")
+# plot gemmini bars (figure 13b)
+csv_data_gemmini = parse_screen_buffer(sb_gemmini)
+fig, timing_data = plot_timing_data(csv_data_gemmini)            
+output_filename = "figures/gemmini_bars.png"
+fig.savefig(output_filename, dpi=300, bbox_inches='tight')
+print(f"Plot saved as: {output_filename}")
         
-# # plot saturn vs scalar for VIO (figure 14)
-# csv_data_scalar = parse_screen_buffer(sb_generic)
-# plot_ov_speedup_over_scalar(csv_data_saturn, csv_data_scalar)
+# plot saturn vs scalar for VIO (figure 14)
+csv_data_scalar = parse_screen_buffer(sb_generic)
+plot_ov_speedup_over_scalar(csv_data_saturn, csv_data_scalar)
